@@ -6,30 +6,30 @@ import os
 from tqdm import tqdm
 import glob
 from pdf2jpg import pdf2jpg
-inputpath = "./board.pdf"
-outputpath = "./"
-result = pdf2jpg.convert_pdf2jpg(inputpath, outputpath, dpi=300, pages="ALL")
 from Fonction_GUI import *
 
 customtkinter.set_appearance_mode("Dark")  # Modes: "System" (standard), "Dark", "Light"
 customtkinter.set_default_color_theme("blue")  # Themes: "blue" (standard), "green", "dark-blue"
-# moves_df = pd.read_csv("../Data/moves_df.csv", dtype={"fen": str, 'zobrist_key': str})
 #Partie Data
-game_index = 3
+global game_index
+game_index = 10
+global i
 i = dict_corres[game_index]
+global Nb_moves
+Nb_moves=getNbMoves(game_index)
 # nb_moves = getNbMoves(game_index)
-
+global best_move_evals
 best_move_evals = []
+global move_evals
 move_evals = []
+global win_probas_best_move
 win_probas_best_move = []
+global win_probas
 win_probas = []
-
+global board
 board = chess.Board()
 
 class App(customtkinter.CTk):
-    # WIDTH = 1920
-    # HEIGHT = 1080
-
     def __init__(self):
         super().__init__()
         self.title("Mon interface de jeu Python.py")
@@ -88,25 +88,25 @@ class App(customtkinter.CTk):
         self.button_2 = customtkinter.CTkButton(master=self.frame_left,
                                                 text="Partie précédente",
                                                 fg_color = '#3447A6',
-                                                command=self.button_event)
+                                                command=self.button_event5)
         self.button_2.grid(row=4, column=0, pady=3, padx=0)
 
         self.button_3 = customtkinter.CTkButton(master=self.frame_left,
                                                 text="Début de la partie",
                                                 fg_color='#3447A6',
-                                                command=self.button_event)
+                                                command=self.button_event3)
         self.button_3.grid(row=4, column=1, pady=3, padx=0)
 
         self.button_4 = customtkinter.CTkButton(master=self.frame_left,
                                                 text="Prochaine partie",
                                                 fg_color='#3447A6',
-                                                command=self.button_event)
+                                                command=self.button_event4)
         self.button_4.grid(row=4, column=2, pady=3, padx=0)
 
         self.button_5 = customtkinter.CTkButton(master=self.frame_left,
                                                 text="Avancer d'un coup",
                                                 fg_color='#3447A6',
-                                                command=self.button_event2)
+                                                command= self.button_event2)
         self.button_5.grid(row=5, column=2, pady=3, padx=0)
 
         self.button_6 = customtkinter.CTkButton(master=self.frame_left,
@@ -118,7 +118,7 @@ class App(customtkinter.CTk):
         self.button_7 = customtkinter.CTkButton(master=self.frame_left,
                                                 text="Revenir d'un coup",
                                                 fg_color='#3447A6',
-                                                command=self.button_event)
+                                                command=self.button_event6)
         self.button_7.grid(row=5, column=0, pady=3, padx=0)
 
         self.button_8 = customtkinter.CTkButton(master=self.frame_left,
@@ -140,33 +140,26 @@ class App(customtkinter.CTk):
         self.button_10.grid(row=6, column=2, pady=3, padx=0)
 
         image2 = Image.open("T_m.png")
-        w_im, h_im = image2.size
-        image2 = image2.resize((int(w_im / 2), int(h_im / 2)))
+        w_im_2, h_im_2 = image2.size
+        image2 = image2.resize((int(w_im_2 / 2), int(h_im_2 / 2)))
         print(image2.size)
         self.bg_image2 = ImageTk.PhotoImage(image2)
 
         self.image_label2 = tkinter.Label(master=self.frame_left, image=self.bg_image2,
-                                          height=int(h_im / 2),
-                                          width=int(w_im / 2))
+                                          height=int(h_im_2 / 2),
+                                          width=int(w_im_2 / 2))
         self.image_label2.grid(row=7, column=0, sticky="nw", padx=50, pady=15, columnspan=3)
 
         image3 = Image.open("T_m.png")
-        w_im, h_im = image3.size
-        image3 = image3.resize((int(w_im / 2), int(h_im / 2)))
+        w_im_3, h_im_3 = image3.size
+        image3 = image3.resize((int(w_im_3 / 2), int(h_im_3 / 2)))
         print(image3.size)
         self.bg_image3 = ImageTk.PhotoImage(image3)
 
         self.image_label3 = tkinter.Label(master=self.frame_left, image=self.bg_image3,
-                                          height=int(h_im / 2),
-                                          width=int(w_im / 2))
+                                          height=int(h_im_3 / 2),
+                                          width=int(w_im_3 / 2))
         self.image_label3.grid(row=8, column=0, sticky="nw", padx=50, pady=2, columnspan=3)
-
-
-        # self.combobox = customtkinter.CTkComboBox(master=self.frame_left,
-        #                                     values=["option 1", "option 2"],
-        #                                     command=self.optionmenu_callback,
-        #                                     variable=self.optionmenu_var)
-        # self.combobox.grid(row=4,column=1,pady=10,padx=2)
 
         self.label_mode = customtkinter.CTkLabel(master=self.frame_left, text="Appearance Mode:")
         self.label_mode.grid(row=10, column=0, pady=0, padx=2, sticky="w")
@@ -176,27 +169,10 @@ class App(customtkinter.CTk):
                                                         command=self.change_appearance_mode)
         self.optionmenu_1.grid(row=11, column=0, pady=0, padx=2, sticky="w")
 
-        # ============ frame_right ============
-
-        # configure grid layout (3x7)
-        # self.frame_right.rowconfigure((0, 1, 2, 3), weight=1)
-        # self.frame_right.rowconfigure(7, weight=10)
-        # self.frame_right.columnconfigure((0, 1), weight=10)
-        # self.frame_right.columnconfigure(2, weight=0)
-        # self.frame_right.columnconfigure((0,1), weight=2)
-
-        # self.frame_info = customtkinter.CTkFrame(master=self.frame_right,width=self.WIDTH,height=self.HEIGHT)
-        # self.frame_info.grid(row=0, column=0, columnspan=2, rowspan=4, pady=20, padx=20, sticky="nsew")
-
-        # ============ frame_info ============
-
-        # # configure grid layout (1x1)
-        # self.frame_info.rowconfigure(0, weight=1)
-        # self.frame_info.columnconfigure(0, weight=1)
 
         # load image with PIL and convert to PhotoImage
         # image = Image.open("Chess_image.png").resize((960, 540))
-        image = Image.open("Test_echiquier.jpg")
+        image = Image.open("board_init.png")
         w_im, h_im =image.size
         image=image.resize((int(w_im/2),int(h_im/2)))
         print(image.size)
@@ -213,161 +189,132 @@ class App(customtkinter.CTk):
 
         self.slider_1 = customtkinter.CTkSlider(master=self.frame_right,
                                                 from_=0,
-                                                to=10,
-                                                number_of_steps=10,
+                                                to=Nb_moves,
+                                                number_of_steps=Nb_moves,
                                                 width=int(w_im/2.5),
                                                 command=self.progress_bar)
-        self.slider_1.grid(row=2, column=0, pady=10, padx=0, sticky="nw", columnspan=2)
-
-        # image2 = Image.open("Chess_image.png")
-        # w_im, h_im = image2.size
-        # image2 = image2.resize((int(w_im / 4), int(h_im / 4)))
-        # print(image2.size)
-        # self.bg_image2 = ImageTk.PhotoImage(image2)
-        #
-        # self.image_label2 = tkinter.Label(master=self.frame_right, image=self.bg_image2,
-        #                                  height=int(h_im / 4),
-        #                                  width=int(w_im / 4))
-        # self.image_label2.grid(row=3, column=0, sticky="nw", padx=0, pady=15)
-        #
-        # image3 = Image.open("Chess_image.png")
-        # w_im, h_im = image3.size
-        # image3 = image3.resize((int(w_im / 4), int(h_im / 4)))
-        # print(image3.size)
-        # self.bg_image3 = ImageTk.PhotoImage(image3)
-        #
-        # self.image_label3 = tkinter.Label(master=self.frame_right, image=self.bg_image3,
-        #                                   height=int(h_im / 4),
-        #                                   width=int(w_im / 4))
-        # self.image_label3.grid(row=3, column=1, sticky="nw", padx=0, pady=15)
+        # self.slider_1.grid(row=2, column=0, pady=10, padx=0, sticky="nw", columnspan=2)
 
         image4 = Image.open("T_zoom_m.png")
-        w_im, h_im = image4.size
-        image4 = image4.resize((int(w_im /1.3), int(h_im / 1.3)))
+        w_im_4, h_im_4 = image4.size
+        image4 = image4.resize((int(w_im_4 /1.3), int(h_im_4 / 1.3)))
         print(image4.size)
         self.bg_image4 = ImageTk.PhotoImage(image4)
 
         self.image_label4 = tkinter.Label(master=self.frame_right, image=self.bg_image4,
-                                          height=int(h_im / 1.3),
-                                          width=int(w_im / 1.3))
+                                          height=int(h_im_4 / 1.3),
+                                          width=int(w_im_4 / 1.3))
         self.image_label4.grid(row=0, column=3, sticky="nw", padx=0, pady=15)
 
         image5 = Image.open("T_zoom_m.png")
-        w_im, h_im = image5.size
-        image5 = image5.resize((int(w_im / 1.3), int(h_im / 1.3)))
+        w_im_5, h_im_5 = image5.size
+        image5 = image5.resize((int(w_im_5 / 1.3), int(h_im_5 / 1.3)))
         print(image5.size)
         self.bg_image5 = ImageTk.PhotoImage(image5)
 
         self.image_label5 = tkinter.Label(master=self.frame_right, image=self.bg_image5,
-                                          height=int(h_im / 1.3),
-                                          width=int(w_im / 1.3))
+                                          height=int(h_im_5 / 1.3),
+                                          width=int(w_im_5 / 1.3))
         self.image_label5.grid(row=1, column=3, sticky="nw", padx=0, pady=15)
-
-
-        # self.label_info_1 = customtkinter.CTkLabel(master=self.frame_info,
-        #                                            text="CTkLabel: Lorem ipsum dolor sit,\n" +
-        #                                                 "amet consetetur sadipscing elitr,\n" +
-        #                                                 "sed diam nonumy eirmod tempor" ,
-        #                                            height=100,
-        #                                            corner_radius=6,  # <- custom corner radius
-        #                                            fg_color=("white", "gray38"),  # <- custom tuple-color
-        #                                            justify=tkinter.LEFT)
-        # self.label_info_1.grid(column=0, row=0, sticky="nwe", padx=15, pady=15)
-        #
-        # self.progressbar = customtkinter.CTkProgressBar(master=self.frame_info)
-        # self.progressbar.grid(row=1, column=0, sticky="ew", padx=15, pady=15)
-
-        # ============ frame_right ============
-
-        # self.radio_var = tkinter.IntVar(value=0)
-
-        # self.label_radio_group = customtkinter.CTkLabel(master=self.frame_right,
-        #                                                 text="CTkRadioButton Group:")
-        # self.label_radio_group.grid(row=0, column=2, columnspan=1, pady=20, padx=10, sticky="")
-
-        # self.radio_button_1 = customtkinter.CTkRadioButton(master=self.frame_right,
-        #                                                    variable=self.radio_var,
-        #                                                    value=0)
-        # self.radio_button_1.grid(row=1, column=2, pady=10, padx=20, sticky="n")
-        #
-        # self.radio_button_2 = customtkinter.CTkRadioButton(master=self.frame_right,
-        #                                                    variable=self.radio_var,
-        #                                                    value=1)
-        # self.radio_button_2.grid(row=2, column=2, pady=10, padx=20, sticky="n")
-        #
-        # self.radio_button_3 = customtkinter.CTkRadioButton(master=self.frame_right,
-        #                                                    variable=self.radio_var,
-        #                                                    value=2)
-        # self.radio_button_3.grid(row=3, column=2, pady=10, padx=20, sticky="n")
-
-        # self.slider_1 = customtkinter.CTkSlider(master=self.frame_right,
-        #                                         from_=0,
-        #                                         to=1,
-        #                                         number_of_steps=3,
-        #                                         command=self.progressbar.set)
-        # self.slider_1.grid(row=4, column=0, columnspan=2, pady=10, padx=20, sticky="we")
-        #
-        # self.slider_2 = customtkinter.CTkSlider(master=self.frame_right,
-        #                                         command=self.progressbar.set)
-        # self.slider_2.grid(row=5, column=0, columnspan=2, pady=10, padx=20, sticky="we")
-
-        # self.switch_1 = customtkinter.CTkSwitch(master=self.frame_right,
-        #                                         text="CTkSwitch")
-        # self.switch_1.grid(row=4, column=2, columnspan=1, pady=10, padx=20, sticky="we")
-        #
-        # self.switch_2 = customtkinter.CTkSwitch(master=self.frame_right,
-        #                                         text="CTkSwitch")
-        # self.switch_2.grid(row=5, column=2, columnspan=1, pady=10, padx=20, sticky="we")
-        #
-        # self.combobox_1 = customtkinter.CTkComboBox(master=self.frame_right,
-        #                                             values=["Value 1", "Value 2"])
-        # self.combobox_1.grid(row=6, column=2, columnspan=1, pady=10, padx=20, sticky="we")
-        #
-        # self.check_box_1 = customtkinter.CTkCheckBox(master=self.frame_right,
-        #                                              text="CTkCheckBox")
-        # self.check_box_1.grid(row=6, column=0, pady=10, padx=20, sticky="w")
-        #
-        # self.check_box_2 = customtkinter.CTkCheckBox(master=self.frame_right,
-        #                                              text="CTkCheckBox")
-        # self.check_box_2.grid(row=6, column=1, pady=10, padx=20, sticky="w")
-        #
-        # self.entry = customtkinter.CTkEntry(master=self.frame_right,
-        #                                     width=120,
-        #                                     placeholder_text="CTkEntry")
-        # self.entry.grid(row=8, column=0, columnspan=2, pady=20, padx=20, sticky="we")
-        #
-        # self.button_5 = customtkinter.CTkButton(master=self.frame_right,
-        #                                         text="CTkButton",
-        #                                         border_width=2,  # <- custom border_width
-        #                                         fg_color=None,  # <- no fg_color
-        #                                         command=self.button_event)
-        # self.button_5.grid(row=8, column=2, columnspan=1, pady=20, padx=20, sticky="we")
 
         # set default values
         self.optionmenu_1.set("Dark")
-        # self.combobox_1.set("CTkCombobox")
-        # self.radio_button_1.select()
-        # self.slider_1.set(0.2)
-        # self.slider_2.set(0.7)
         self.progressbar.set(0)
         self.slider_1.set(0)
-        # self.switch_2.select()
-        # self.radio_button_3.configure(state=tkinter.DISABLED)
-        # self.check_box_1.configure(state=tkinter.DISABLED, text="CheckBox disabled")
-        # self.check_box_2.select()
-        # self.optionmenu_var = customtkinter.StringVar(value="option 2")  # set initial value
 
 
     def button_validation(self):
         Text=self.entry_id_partie.get()
-        print(Text)
+        global game_index
+        game_index=int(Text)
+        global i
+        i = dict_corres[game_index]
+        global Nb_moves
+        Nb_moves = getNbMoves(game_index)
+        global best_move_evals
+        best_move_evals = []
+        global move_evals
+        move_evals = []
+        global win_probas_best_move
+        win_probas_best_move = []
+        global win_probas
+        win_probas = []
+        global board
+        board = chess.Board()
+
+        self.initialisation()
+
+
+
     def button_event(self):
         print("Button pressed")
+
+    def initialisation(self):
+        global i
+        i=dict_corres[game_index]
+        image2 = Image.open("T_m.png")
+        w_im_2, h_im_2 = image2.size
+        image2 = image2.resize((int(w_im_2 / 2), int(h_im_2 / 2)))
+        print(image2.size)
+        self.bg_image2 = ImageTk.PhotoImage(image2)
+
+        self.image_label2 = tkinter.Label(master=self.frame_left, image=self.bg_image2,
+                                          height=int(h_im_2 / 2),
+                                          width=int(w_im_2 / 2))
+        self.image_label2.grid(row=7, column=0, sticky="nw", padx=50, pady=15, columnspan=3)
+
+        image3 = Image.open("T_m.png")
+        w_im_3, h_im_3 = image3.size
+        image3 = image3.resize((int(w_im_3 / 2), int(h_im_3 / 2)))
+        print(image3.size)
+        self.bg_image3 = ImageTk.PhotoImage(image3)
+
+        self.image_label3 = tkinter.Label(master=self.frame_left, image=self.bg_image3,
+                                          height=int(h_im_3 / 2),
+                                          width=int(w_im_3 / 2))
+        self.image_label3.grid(row=8, column=0, sticky="nw", padx=50, pady=2, columnspan=3)
+        # load image with PIL and convert to PhotoImage
+        image = Image.open("board_init.png")
+        w_im, h_im = image.size
+        image = image.resize((int(w_im / 2), int(h_im / 2)))
+        print(image.size)
+        self.bg_image = ImageTk.PhotoImage(image)
+
+        self.image_label = tkinter.Label(master=self.frame_right, image=self.bg_image,
+                                         height=int(h_im / 2),
+                                         width=int(w_im / 2))
+        self.image_label.grid(row=0, column=0, sticky="nw", padx=15, pady=15, columnspan=2, rowspan=2)
+        image4 = Image.open("T_zoom_m.png")
+        w_im_4, h_im_4 = image4.size
+        image4 = image4.resize((int(w_im_4 / 1.3), int(h_im_4 / 1.3)))
+        print(image4.size)
+        self.bg_image4 = ImageTk.PhotoImage(image4)
+
+        self.image_label4 = tkinter.Label(master=self.frame_right, image=self.bg_image4,
+                                          height=int(h_im_4 / 1.3),
+                                          width=int(w_im_4 / 1.3))
+        self.image_label4.grid(row=0, column=3, sticky="nw", padx=0, pady=15)
+
+        image5 = Image.open("T_zoom_m.png")
+        w_im_5, h_im_5 = image5.size
+        image5 = image5.resize((int(w_im_5 / 1.3), int(h_im_5 / 1.3)))
+        print(image5.size)
+        self.bg_image5 = ImageTk.PhotoImage(image5)
+
+        self.image_label5 = tkinter.Label(master=self.frame_right, image=self.bg_image5,
+                                          height=int(h_im_5 / 1.3),
+                                          width=int(w_im_5 / 1.3))
+        self.image_label5.grid(row=1, column=3, sticky="nw", padx=0, pady=15)
 
     def button_event2(self):
         print("Bouton 2")
         # game_index = 3
         # i = dict_corres[game_index]
+        global i
+        image2 = Image.open("T_m.png")
+        w_im_2, h_im_2 = image2.size
+        image5 = Image.open("T_zoom_m.png")
+        w_im_5, h_im_5 = image5.size
         nb_moves = getNbMoves(game_index)
         move_to_play_on_board, best_move_from, best_move_to = playMove(i, board,
                                                                        move_evals, best_move_evals,
@@ -386,6 +333,218 @@ class App(customtkinter.CTk):
         filename_probas_global = "./Images/probas_global"
         win_proba_graph_global(nb_moves, win_probas, show_graph=False, save_graph=filename_probas_global)
 
+        image = Image.open("board.png")
+        w_im, h_im = image.size
+        image = image.resize((int(w_im/2), int(h_im/2)))
+        self.bg_image = ImageTk.PhotoImage(image)
+        self.image_label = tkinter.Label(master=self.frame_right, image=self.bg_image,
+                                         height=int(h_im/2),
+                                         width=int(w_im/2))
+        self.image_label.grid(row=0, column=0, sticky="nw", padx=15, pady=15, columnspan=2, rowspan=2)
+
+        image2 = Image.open("Images/eval_global.png")
+        image2 = image2.resize((int(w_im_2 / 2), int(h_im_2 / 2)))
+        self.bg_image2 = ImageTk.PhotoImage(image2)
+        self.image_label2 = tkinter.Label(master=self.frame_left, image=self.bg_image2,
+                                          height=int(h_im_2 / 2),
+                                          width=int(w_im_2 / 2))
+        self.image_label2.grid(row=7, column=0, sticky="nw", padx=50, pady=15, columnspan=3)
+
+        image3 = Image.open("Images/probas_global.png")
+        image3 = image3.resize((int(w_im_2 / 2), int(h_im_2 / 2)))
+        print(image3.size)
+        self.bg_image3 = ImageTk.PhotoImage(image3)
+        self.image_label3 = tkinter.Label(master=self.frame_left, image=self.bg_image3,
+                                          height=int(h_im_2 / 2),
+                                          width=int(w_im_2 / 2))
+        self.image_label3.grid(row=8, column=0, sticky="nw", padx=50, pady=2, columnspan=3)
+
+        image4 = Image.open("Images/eval_zoom.png")
+        image4 = image4.resize((int(w_im_5 / 1.3), int(h_im_5 / 1.3)))
+        print(image4.size)
+        self.bg_image4 = ImageTk.PhotoImage(image4)
+
+        self.image_label4 = tkinter.Label(master=self.frame_right, image=self.bg_image4,
+                                          height=int(h_im_5 / 1.3),
+                                          width=int(w_im_5 / 1.3))
+        self.image_label4.grid(row=0, column=3, sticky="nw", padx=0, pady=15)
+
+        image5 = Image.open("Images/probas_zoom.png")
+        image5 = image5.resize((int(w_im_5 / 1.3), int(h_im_5 / 1.3)))
+        print(image5.size)
+        self.bg_image5 = ImageTk.PhotoImage(image5)
+
+        self.image_label5 = tkinter.Label(master=self.frame_right, image=self.bg_image5,
+                                          height=int(h_im_5 / 1.3),
+                                          width=int(w_im_5 / 1.3))
+        self.image_label5.grid(row=1, column=3, sticky="nw", padx=0, pady=15)
+        self.progressbar.set(len(win_probas)/Nb_moves)
+        # self.slider_1.set(len(win_probas))
+        i+=1
+
+    def button_event3(self):
+        global i
+        i = dict_corres[game_index]
+        global Nb_moves
+        Nb_moves = getNbMoves(game_index)
+        global best_move_evals
+        best_move_evals = []
+        global move_evals
+        move_evals = []
+        global win_probas_best_move
+        win_probas_best_move = []
+        global win_probas
+        win_probas = []
+        global board
+        board = chess.Board()
+        print(game_index)
+        print(i)
+        self.initialisation()
+
+    def button_event4(self):
+        global game_index
+        game_index +=1
+        global i
+        i = dict_corres[game_index]
+        global Nb_moves
+        Nb_moves = getNbMoves(game_index)
+        global best_move_evals
+        best_move_evals = []
+        global move_evals
+        move_evals = []
+        global win_probas_best_move
+        win_probas_best_move = []
+        global win_probas
+        win_probas = []
+        global board
+        board = chess.Board()
+        print(game_index)
+        print(i)
+        self.initialisation()
+
+    def button_event5(self):
+        global game_index
+        game_index -=1
+        global i
+        i = dict_corres[game_index]
+        global Nb_moves
+        Nb_moves = getNbMoves(game_index)
+        global best_move_evals
+        best_move_evals = []
+        global move_evals
+        move_evals = []
+        global win_probas_best_move
+        win_probas_best_move = []
+        global win_probas
+        win_probas = []
+        global board
+        board = chess.Board()
+        print(game_index)
+        print(i)
+        self.initialisation()
+
+    def button_event6(self):
+        print("Bouton 6")
+        global best_move_evals
+        global move_evals
+        global win_probas_best_move
+        global win_probas
+        global board
+        if len(move_evals)<=1:
+            print("Impossible")
+            best_move_evals.pop()
+            move_evals.pop()
+            win_probas_best_move.pop()
+            win_probas.pop()
+            board.pop()
+            self.initialisation()
+        else:
+            global i
+            image2 = Image.open("T_m.png")
+            w_im_2, h_im_2 = image2.size
+            image5 = Image.open("T_zoom_m.png")
+            w_im_5, h_im_5 = image5.size
+            nb_moves = getNbMoves(game_index)
+
+            i-=2
+            best_move_evals.pop()
+            best_move_evals.pop()
+            move_evals.pop()
+            move_evals.pop()
+            win_probas_best_move.pop()
+            win_probas_best_move.pop()
+            win_probas.pop()
+            win_probas.pop()
+            board.pop()
+            board.pop()
+
+
+
+            move_to_play_on_board, best_move_from, best_move_to = playMove(i, board,
+                                                                           move_evals, best_move_evals,
+                                                                           win_probas, win_probas_best_move)
+            save_board(board, move_to_play_on_board, best_move_from, best_move_to)
+            filename_eval_zoom = "./Images/eval_zoom"
+            eval_graph_zoom(nb_moves, move_evals, best_move_evals, show_graph=False, save_graph=filename_eval_zoom)
+
+            filename_eval_global = "./Images/eval_global"
+            eval_graph_global(nb_moves, move_evals, show_graph=False, save_graph=filename_eval_global)
+
+            filename_probas_zoom = "./Images/probas_zoom"
+            win_proba_graph_zoom(nb_moves, win_probas, win_probas_best_move, show_graph=False,
+                                 save_graph=filename_probas_zoom)
+
+            filename_probas_global = "./Images/probas_global"
+            win_proba_graph_global(nb_moves, win_probas, show_graph=False, save_graph=filename_probas_global)
+
+            image = Image.open("board.png")
+            w_im, h_im = image.size
+            image = image.resize((int(w_im/2), int(h_im/2)))
+            self.bg_image = ImageTk.PhotoImage(image)
+            self.image_label = tkinter.Label(master=self.frame_right, image=self.bg_image,
+                                             height=int(h_im/2),
+                                             width=int(w_im/2))
+            self.image_label.grid(row=0, column=0, sticky="nw", padx=15, pady=15, columnspan=2, rowspan=2)
+
+            image2 = Image.open("Images/eval_global.png")
+            image2 = image2.resize((int(w_im_2 / 2), int(h_im_2 / 2)))
+            self.bg_image2 = ImageTk.PhotoImage(image2)
+            self.image_label2 = tkinter.Label(master=self.frame_left, image=self.bg_image2,
+                                              height=int(h_im_2 / 2),
+                                              width=int(w_im_2 / 2))
+            self.image_label2.grid(row=7, column=0, sticky="nw", padx=50, pady=15, columnspan=3)
+
+            image3 = Image.open("Images/probas_global.png")
+            image3 = image3.resize((int(w_im_2 / 2), int(h_im_2 / 2)))
+            print(image3.size)
+            self.bg_image3 = ImageTk.PhotoImage(image3)
+            self.image_label3 = tkinter.Label(master=self.frame_left, image=self.bg_image3,
+                                              height=int(h_im_2 / 2),
+                                              width=int(w_im_2 / 2))
+            self.image_label3.grid(row=8, column=0, sticky="nw", padx=50, pady=2, columnspan=3)
+
+            image4 = Image.open("Images/eval_zoom.png")
+            image4 = image4.resize((int(w_im_5 / 1.3), int(h_im_5 / 1.3)))
+            print(image4.size)
+            self.bg_image4 = ImageTk.PhotoImage(image4)
+
+            self.image_label4 = tkinter.Label(master=self.frame_right, image=self.bg_image4,
+                                              height=int(h_im_5 / 1.3),
+                                              width=int(w_im_5 / 1.3))
+            self.image_label4.grid(row=0, column=3, sticky="nw", padx=0, pady=15)
+
+            image5 = Image.open("Images/probas_zoom.png")
+            image5 = image5.resize((int(w_im_5 / 1.3), int(h_im_5 / 1.3)))
+            print(image5.size)
+            self.bg_image5 = ImageTk.PhotoImage(image5)
+
+            self.image_label5 = tkinter.Label(master=self.frame_right, image=self.bg_image5,
+                                              height=int(h_im_5 / 1.3),
+                                              width=int(w_im_5 / 1.3))
+            self.image_label5.grid(row=1, column=3, sticky="nw", padx=0, pady=15)
+            self.progressbar.set(len(win_probas)/Nb_moves)
+            # self.slider_1.set(len(win_probas))
+            i+=1
 
     def change_appearance_mode(self, new_appearance_mode):
         customtkinter.set_appearance_mode(new_appearance_mode)
@@ -394,7 +553,7 @@ class App(customtkinter.CTk):
         self.destroy()
     def progress_bar(self,value):
         print(value)
-        self.progressbar.set(value/10)
+        self.progressbar.set(value/Nb_moves)
 
     # def optionmenu_callback(self,choice):
     #     print("optionmenu dropdown clicked:", choice)

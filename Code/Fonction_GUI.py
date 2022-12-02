@@ -16,6 +16,7 @@ import svglib
 from svglib.svglib import svg2rlg
 from reportlab.graphics import renderPDF, renderPM
 from pdf2jpg import pdf2jpg
+import fitz
 
 moves_df = pd.read_csv("../Data/moves_df.csv", dtype={"fen": str, 'zobrist_key': str})
 # functions to evaluate a given chess position
@@ -119,9 +120,11 @@ def save_board(board, last_move, best_move_from, best_move_to):
     drawing = svg2rlg('board.svg')
     renderPDF.drawToFile(drawing, "board.pdf")
 
-    inputpath = "./board.pdf"
-    outputpath = "./"
-    result = pdf2jpg.convert_pdf2jpg(inputpath, outputpath, dpi=300, pages="ALL")
+    file_path= "board.pdf"
+    doc= fitz.open(file_path)
+    for page in doc :
+        pix= page.get_pixmap(dpi=300)
+        pix.save("board.png")
 
 def line_0(nb_moves):
     x = 0
