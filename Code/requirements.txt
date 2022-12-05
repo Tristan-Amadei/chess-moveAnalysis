@@ -5,3 +5,6 @@ chess
 svglib
 reportlab
 pymupdf
+scikit-learn
+imblearn
+seaborn
