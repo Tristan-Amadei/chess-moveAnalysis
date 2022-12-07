@@ -8,3 +8,9 @@ pymupdf
 scikit-learn
 imblearn
 seaborn
+pickle
+matplotlib
+fitz
+tkinter
+customtkinter
+PIL

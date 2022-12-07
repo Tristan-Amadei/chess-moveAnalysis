@@ -344,7 +344,7 @@ except:
         pickle.dump(dict_corres, f)
 
 
-def playMove(i, board, move_evals, best_move_evals, win_probas, win_probas_best_move):
+def playMove(i, board, move_evals, best_move_evals, win_probas, win_probas_best_move, time):
     engine = chess.engine.SimpleEngine.popen_uci("../Stockfish/stockfish_15_x64_avx2")
 
     # we get the move to play, following the games in our database
@@ -354,14 +354,14 @@ def playMove(i, board, move_evals, best_move_evals, win_probas, win_probas_best_
     # we leverage the chess engine to analyse the current position, before playing our move, to find the best move
     # current_board_analysis = engine.analyse(board, chess.engine.Limit(time=0.5))
     # best_move = current_board_analysis['pv'][0]
-    best_move = (engine.play(board, chess.engine.Limit(time=0.5))).move
+    best_move = (engine.play(board, chess.engine.Limit(time=time))).move
     best_move_from = best_move.from_square
     best_move_to = best_move.to_square
 
     # we play the best move on the board, usr the engine to get the evaluation of the position
     # then we'll undo this move and play our move
     board.push(best_move)
-    best_move_eval, win_proba_best_move = position_eval(engine, board, time_limit=0.5, return_wdl=True)
+    best_move_eval, win_proba_best_move = position_eval(engine, board, time_limit=time, return_wdl=True)
     best_move_evals.append(best_move_eval)
     win_probas_best_move.append(win_proba_best_move.expectation())
     board.pop()  # undo the last move
@@ -369,7 +369,8 @@ def playMove(i, board, move_evals, best_move_evals, win_probas, win_probas_best_
     # we now play our move on the board and get the evaluation
     board.push(move_to_play_on_board)
     eval_, win_proba = get_eval_after_move(move_to_play_on_board, best_move,
-                                           best_move_eval, engine, board, time_limit=0.5)
+                                           best_move_eval, engine, board, time_limit=time
+                                           )
     move_evals.append(eval_)
     win_probas.append(win_proba.expectation())
 
