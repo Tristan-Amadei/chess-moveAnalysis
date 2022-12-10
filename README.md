@@ -16,17 +16,17 @@ $ pip install -r requirements.txt
 
 ## Ordre des Notebooks
 
-- [Data cleaning et processing](#data-cleaning-/-processing)
-  - [1. Clean_dataset](#1.-Clean_dataset.ipynb)
-  - [2. Create_metric_multithread](#2.-Create_metric_multithread.ipynb)
+- [Data cleaning et processing](#data-cleaning--processing)
+  - [1. Clean_dataset](#1-Clean_datasetipynb)
+  - [2. Create_metric_multithread](#2-Create_metric_multithreadipynb)
 - [3. Data Visualisation](#Data-visualisation)
 - [GUI](#Interface-graphique)
   - [4. Test_moderne](#Test_moderne)
 - [Machine Learning](#Machine-learning)
-  - [5. Clustering](#Clustering)
-  - [6. Prediction](#Prediction)
+  - [5. Clustering](#5-Clusteringipynb)
+  - [6. Prediction](#6-Predictionipynb)
   
-## data cleaning / processing
+## Data Cleaning / Processing
 ### 1. Clean_dataset.ipynb
 La première étape ce de projet était de rendre utilisable la base de données. Le fichier de base ressemble à ceci: ![base_brute](/assets/images/chessDB.png)
 </br> </br> Le premier notebook à utiliser est "Clean_datset.ipynb". Il sert surtout à nettoyer la base, c'est-à-dire enlever les donnes impropres et les features inutiles. Avec ce notebook, on crée un fichier csv, téléchargeable [ici](https://minio.lab.sspcloud.fr/tamadei/chessDB/clean_df.csv?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=49336FAAB9232PUJR6RC%2F20221210%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20221210T173616Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Security-Token=eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3NLZXkiOiI0OTMzNkZBQUI5MjMyUFVKUjZSQyIsImFsbG93ZWQtb3JpZ2lucyI6WyIqIl0sImF1ZCI6WyJtaW5pby1kYXRhbm9kZSIsIm9ueXhpYSIsImFjY291bnQiXSwiYXV0aF90aW1lIjoxNjcwNjkwNDE4LCJhenAiOiJvbnl4aWEiLCJlbWFpbCI6InRyaXN0YW4uYW1hZGVpQGVuc2FlLmZyIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsImV4cCI6MTY3MDc3NjgyMCwiZmFtaWx5X25hbWUiOiJBbWFkZWkiLCJnaXZlbl9uYW1lIjoiVHJpc3RhbiIsImdyb3VwcyI6W10sImlhdCI6MTY3MDY5MDQxOSwiaXNzIjoiaHR0cHM6Ly9hdXRoLmxhYi5zc3BjbG91ZC5mci9hdXRoL3JlYWxtcy9zc3BjbG91ZCIsImp0aSI6IjMyMzc4ZWQ0LTAwNzAtNGNhZi04MTUwLWQwYTZmZTZjZjY4ZiIsIm5hbWUiOiJUcmlzdGFuIEFtYWRlaSIsIm5vbmNlIjoiZDkzNjc2ZmYtZTI0Zi00YzY3LTk0Y2EtYTRkZTEyOTY0ZDAxIiwicG9saWN5Ijoic3Rzb25seSIsInByZWZlcnJlZF91c2VybmFtZSI6InRhbWFkZWkiLCJyZWFsbV9hY2Nlc3MiOnsicm9sZXMiOlsib2ZmbGluZV9hY2Nlc3MiLCJ1bWFfYXV0aG9yaXphdGlvbiIsImRlZmF1bHQtcm9sZXMtc3NwY2xvdWQiXX0sInJlc291cmNlX2FjY2VzcyI6eyJhY2NvdW50Ijp7InJvbGVzIjpbIm1hbmFnZS1hY2NvdW50IiwibWFuYWdlLWFjY291bnQtbGlua3MiLCJ2aWV3LXByb2ZpbGUiXX19LCJzY29wZSI6Im9wZW5pZCBwcm9maWxlIGdyb3VwcyBlbWFpbCIsInNlc3Npb25fc3RhdGUiOiIzZjgwM2YzNi04NGM2LTQyZDEtYmI5Zi1jNjlkZDI3MWI2NDQiLCJzaWQiOiIzZjgwM2YzNi04NGM2LTQyZDEtYmI5Zi1jNjlkZDI3MWI2NDQiLCJzdWIiOiJhNzI5NmYwOC1lZjBlLTRjNGQtODllNy1lYjRmYTY4YmM5MTEiLCJ0eXAiOiJCZWFyZXIifQ.y7-CSjBQx6LtmOn9-_DBa_T3kFvfACc7GscXb-W7gvDA_RkRue19POVfEoxKmrvFGCvdG-Z2G0evY8yvRn-Jpg&X-Amz-Signature=fd9310068bd1ecb5290750ef58e296b1ff4a5fb6279dddf088dbdcf22c14939e&X-Amz-Security-Token=eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3NLZXkiOiI0OTMzNkZBQUI5MjMyUFVKUjZSQyIsImFsbG93ZWQtb3JpZ2lucyI6WyIqIl0sImF1ZCI6WyJtaW5pby1kYXRhbm9kZSIsIm9ueXhpYSIsImFjY291bnQiXSwiYXV0aF90aW1lIjoxNjcwNjkwNDE4LCJhenAiOiJvbnl4aWEiLCJlbWFpbCI6InRyaXN0YW4uYW1hZGVpQGVuc2FlLmZyIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsImV4cCI6MTY3MDc3NjgyMCwiZmFtaWx5X25hbWUiOiJBbWFkZWkiLCJnaXZlbl9uYW1lIjoiVHJpc3RhbiIsImdyb3VwcyI6W10sImlhdCI6MTY3MDY5MDQxOSwiaXNzIjoiaHR0cHM6Ly9hdXRoLmxhYi5zc3BjbG91ZC5mci9hdXRoL3JlYWxtcy9zc3BjbG91ZCIsImp0aSI6IjMyMzc4ZWQ0LTAwNzAtNGNhZi04MTUwLWQwYTZmZTZjZjY4ZiIsIm5hbWUiOiJUcmlzdGFuIEFtYWRlaSIsIm5vbmNlIjoiZDkzNjc2ZmYtZTI0Zi00YzY3LTk0Y2EtYTRkZTEyOTY0ZDAxIiwicG9saWN5Ijoic3Rzb25seSIsInByZWZlcnJlZF91c2VybmFtZSI6InRhbWFkZWkiLCJyZWFsbV9hY2Nlc3MiOnsicm9sZXMiOlsib2ZmbGluZV9hY2Nlc3MiLCJ1bWFfYXV0aG9yaXphdGlvbiIsImRlZmF1bHQtcm9sZXMtc3NwY2xvdWQiXX0sInJlc291cmNlX2FjY2VzcyI6eyJhY2NvdW50Ijp7InJvbGVzIjpbIm1hbmFnZS1hY2NvdW50IiwibWFuYWdlLWFjY291bnQtbGlua3MiLCJ2aWV3LXByb2ZpbGUiXX19LCJzY29wZSI6Im9wZW5pZCBwcm9maWxlIGdyb3VwcyBlbWFpbCIsInNlc3Npb25fc3RhdGUiOiIzZjgwM2YzNi04NGM2LTQyZDEtYmI5Zi1jNjlkZDI3MWI2NDQiLCJzaWQiOiIzZjgwM2YzNi04NGM2LTQyZDEtYmI5Zi1jNjlkZDI3MWI2NDQiLCJzdWIiOiJhNzI5NmYwOC1lZjBlLTRjNGQtODllNy1lYjRmYTY4YmM5MTEiLCJ0eXAiOiJCZWFyZXIifQ.y7-CSjBQx6LtmOn9-_DBa_T3kFvfACc7GscXb-W7gvDA_RkRue19POVfEoxKmrvFGCvdG-Z2G0evY8yvRn-Jpg), qui correspond à cette base de données 'cleaned'. </br> Il faut placer ce ficher, nommé "clean_df.csv" directement dans le dossier Data. 
