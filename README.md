@@ -21,7 +21,7 @@ $ pip install -r requirements.txt
   - [2. Create_metric_multithread](#2-Create_metric_multithreadipynb)
 - [3. Data Visualisation](#Data-visualisation)
 - [GUI](#Interface-graphique)
-  - [4. Test_moderne](#Test_moderne)
+  - [4. GUI](#Test_moderne)
 - [Machine Learning](#Machine-learning)
   - [5. Clustering](#5-Clusteringipynb)
   - [6. Prediction](#6-Predictionipynb)
@@ -40,7 +40,11 @@ Ce deuxième notebook reprend la base de données nettoyée, obtenue précédemm
 
 ## Data Visualisation
 
+Le notebook "Data visualisation.ipynb" permet de faire des visualisations et des statistiques descriptives de nos données, afin de permettre de bien les comprendre et les prendre en main. 
+
 ## Interface Graphique
+Le fichier GUI.py correspond au code permet de créer notre interface graphique, et l'autre fichier .py (Fonction_GUI.py) permet de stocker les méthodes utilisées pour afficher et jouer avec notre base de données, directement dans l'interface graphique. 
+</br> Le code étant parfois lourd dans les fichiers .py, nous avons repris les idées du code et les avons mises dans le notebook BrideData_GUI.ipynb, qui se veut plus simple à lire. 
 
 ## Machine Learning
 Le but ici est d'utiliser notre base afin d'entrainer des algorithmes de ML à déterminer la qualité d'un coup sur une position donnée. 
