@@ -1,4 +1,4 @@
-# chess-moveAnalysis
+# Chess - Move Analysis ♟️:desktop_computer:
 
 Le but de ce projest est d'entrainer une petite IA à jouer aux échecs. L'idée est d'analyser une base de données de parties de Maitres, et créer une métrique pour chaque coup joué dans chaque partie.
 
