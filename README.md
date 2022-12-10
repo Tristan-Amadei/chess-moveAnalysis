@@ -43,4 +43,27 @@ Ce deuxième notebook reprend la base de données nettoyée, obtenue précédemm
 ## Interface Graphique
 
 ## Machine Learning
-  - [5. Clustering](#Clustering)
+Le but ici est d'utiliser notre base afin d'entrainer des algorithmes de ML à déterminer la qualité d'un coup sur une position donnée. 
+</br> L'idée serait alors d'avoir une IA qui peut jouer aux échecs: pour jouer, elle détermine tous les coups jouables sur une position, les analyse tous avec ce qu'elle a appris de son entrainement et sélectionne celui qu'elle juge le meilleur. 
+
+### 5. Clustering.ipynb
+Nous voulons créer des algorithmes de classification de coups d'échecs. Nous devons donc créer nos classes; pour cela nous entrainons un K-Means pour créer nos clusters de coups d'échecs, qui deviendrons les classes que nous chercherons à predire à l'étape suivante. Le notebook utilisé ici est "Clustering.ipynb". 
+</br> On sauvegarde ces classes dans une nouvelle [base](https://minio.lab.sspcloud.fr/tamadei/chessDB/full_moves_df.csv?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=49336FAAB9232PUJR6RC%2F20221210%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20221210T181120Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Security-Token=eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3NLZXkiOiI0OTMzNkZBQUI5MjMyUFVKUjZSQyIsImFsbG93ZWQtb3JpZ2lucyI6WyIqIl0sImF1ZCI6WyJtaW5pby1kYXRhbm9kZSIsIm9ueXhpYSIsImFjY291bnQiXSwiYXV0aF90aW1lIjoxNjcwNjkwNDE4LCJhenAiOiJvbnl4aWEiLCJlbWFpbCI6InRyaXN0YW4uYW1hZGVpQGVuc2FlLmZyIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsImV4cCI6MTY3MDc3NjgyMCwiZmFtaWx5X25hbWUiOiJBbWFkZWkiLCJnaXZlbl9uYW1lIjoiVHJpc3RhbiIsImdyb3VwcyI6W10sImlhdCI6MTY3MDY5MDQxOSwiaXNzIjoiaHR0cHM6Ly9hdXRoLmxhYi5zc3BjbG91ZC5mci9hdXRoL3JlYWxtcy9zc3BjbG91ZCIsImp0aSI6IjMyMzc4ZWQ0LTAwNzAtNGNhZi04MTUwLWQwYTZmZTZjZjY4ZiIsIm5hbWUiOiJUcmlzdGFuIEFtYWRlaSIsIm5vbmNlIjoiZDkzNjc2ZmYtZTI0Zi00YzY3LTk0Y2EtYTRkZTEyOTY0ZDAxIiwicG9saWN5Ijoic3Rzb25seSIsInByZWZlcnJlZF91c2VybmFtZSI6InRhbWFkZWkiLCJyZWFsbV9hY2Nlc3MiOnsicm9sZXMiOlsib2ZmbGluZV9hY2Nlc3MiLCJ1bWFfYXV0aG9yaXphdGlvbiIsImRlZmF1bHQtcm9sZXMtc3NwY2xvdWQiXX0sInJlc291cmNlX2FjY2VzcyI6eyJhY2NvdW50Ijp7InJvbGVzIjpbIm1hbmFnZS1hY2NvdW50IiwibWFuYWdlLWFjY291bnQtbGlua3MiLCJ2aWV3LXByb2ZpbGUiXX19LCJzY29wZSI6Im9wZW5pZCBwcm9maWxlIGdyb3VwcyBlbWFpbCIsInNlc3Npb25fc3RhdGUiOiIzZjgwM2YzNi04NGM2LTQyZDEtYmI5Zi1jNjlkZDI3MWI2NDQiLCJzaWQiOiIzZjgwM2YzNi04NGM2LTQyZDEtYmI5Zi1jNjlkZDI3MWI2NDQiLCJzdWIiOiJhNzI5NmYwOC1lZjBlLTRjNGQtODllNy1lYjRmYTY4YmM5MTEiLCJ0eXAiOiJCZWFyZXIifQ.y7-CSjBQx6LtmOn9-_DBa_T3kFvfACc7GscXb-W7gvDA_RkRue19POVfEoxKmrvFGCvdG-Z2G0evY8yvRn-Jpg&X-Amz-Signature=bd713d06593c7c0d9d989c6ad1eb7794a49668327ac089f3e494396887c10f7c&X-Amz-Security-Token=eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3NLZXkiOiI0OTMzNkZBQUI5MjMyUFVKUjZSQyIsImFsbG93ZWQtb3JpZ2lucyI6WyIqIl0sImF1ZCI6WyJtaW5pby1kYXRhbm9kZSIsIm9ueXhpYSIsImFjY291bnQiXSwiYXV0aF90aW1lIjoxNjcwNjkwNDE4LCJhenAiOiJvbnl4aWEiLCJlbWFpbCI6InRyaXN0YW4uYW1hZGVpQGVuc2FlLmZyIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsImV4cCI6MTY3MDc3NjgyMCwiZmFtaWx5X25hbWUiOiJBbWFkZWkiLCJnaXZlbl9uYW1lIjoiVHJpc3RhbiIsImdyb3VwcyI6W10sImlhdCI6MTY3MDY5MDQxOSwiaXNzIjoiaHR0cHM6Ly9hdXRoLmxhYi5zc3BjbG91ZC5mci9hdXRoL3JlYWxtcy9zc3BjbG91ZCIsImp0aSI6IjMyMzc4ZWQ0LTAwNzAtNGNhZi04MTUwLWQwYTZmZTZjZjY4ZiIsIm5hbWUiOiJUcmlzdGFuIEFtYWRlaSIsIm5vbmNlIjoiZDkzNjc2ZmYtZTI0Zi00YzY3LTk0Y2EtYTRkZTEyOTY0ZDAxIiwicG9saWN5Ijoic3Rzb25seSIsInByZWZlcnJlZF91c2VybmFtZSI6InRhbWFkZWkiLCJyZWFsbV9hY2Nlc3MiOnsicm9sZXMiOlsib2ZmbGluZV9hY2Nlc3MiLCJ1bWFfYXV0aG9yaXphdGlvbiIsImRlZmF1bHQtcm9sZXMtc3NwY2xvdWQiXX0sInJlc291cmNlX2FjY2VzcyI6eyJhY2NvdW50Ijp7InJvbGVzIjpbIm1hbmFnZS1hY2NvdW50IiwibWFuYWdlLWFjY291bnQtbGlua3MiLCJ2aWV3LXByb2ZpbGUiXX19LCJzY29wZSI6Im9wZW5pZCBwcm9maWxlIGdyb3VwcyBlbWFpbCIsInNlc3Npb25fc3RhdGUiOiIzZjgwM2YzNi04NGM2LTQyZDEtYmI5Zi1jNjlkZDI3MWI2NDQiLCJzaWQiOiIzZjgwM2YzNi04NGM2LTQyZDEtYmI5Zi1jNjlkZDI3MWI2NDQiLCJzdWIiOiJhNzI5NmYwOC1lZjBlLTRjNGQtODllNy1lYjRmYTY4YmM5MTEiLCJ0eXAiOiJCZWFyZXIifQ.y7-CSjBQx6LtmOn9-_DBa_T3kFvfACc7GscXb-W7gvDA_RkRue19POVfEoxKmrvFGCvdG-Z2G0evY8yvRn-Jpg), qui est la concatenation de la base précédente, moves_df, et des classes créées par K-Means. 
+</br> De nouveau, cette base, nommée "full_moves_df.csv", soit être placée dans le dossier Data. 
+</br>Chaque classe correspond à un type de coup, déterminé par l'algorithme K-Means. Cependant, aux échecs, la majorité des coups sont "standards", ainsi le set déterminé par K-Means est très déséquilibré : ![clusters_breakdown](/assets/images/clusters_breakdown.png)
+
+### 6. Prediction.ipynb
+
+Il est enfin temps de passer à la prédiction ! On se place ici dans le notebook "Prediction.ipynb", et on reprend les résultats du K-Means précédent. 
+</br> On va tester plusieurs façons de travailler avec nos données : 
+    </br> - Random Forest
+    </br> - Under-Sampling
+    </br> - Balanced Random Forest
+    </br> - Neural Network
+    
+</br></br> Cependant, notre set de données est trop déséquilibré, et de plus, il faudrait travailler avec une représentation complète de l'échiquier pour faire apprendre quelque chose à nos algorithmes. 
+</br> Voici certains de nos résultats après entrainement d'un réseau de neurones sur nos data: 
+![nn](/assets/images/nn.png)
+</br>
+</br> D'après nos recherches, dont ce [papier](http://cs231n.stanford.edu/reports/2015/pdfs/ConvChess.pdf) de Stanford, il faudrait travailler avec des réseaux de neurones convolutionnels, prenant en entrée soit une image d'un échiquier soit une matrice 8x8 représentant la position actuelle de la partie d'échecs. 
+
