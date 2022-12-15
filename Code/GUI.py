@@ -64,7 +64,7 @@ class App(customtkinter.CTk):
 
         self.label_1 = customtkinter.CTkLabel(master=self.frame_left,
                                               text="Mes options",
-                                              text_font=("Roboto Medium", -16),
+                                              #text_font=("Roboto Medium", -16),
                                               fg_color="#D3CFCF",
                                               height=40,
                                               width=180,
