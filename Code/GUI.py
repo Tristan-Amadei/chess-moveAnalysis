@@ -131,7 +131,7 @@ class App(customtkinter.CTk):
         self.list_time.grid(row=6, column=2, pady=3, padx=0, sticky="we")
 
         #Initialisation avec les images par défaut
-        image2 = Image.open("T_m.png")
+        image2 = Image.open("Images/T_m.png")
         w_im_2, h_im_2 = image2.size
         image2 = image2.resize((int(w_im_2 / 2), int(h_im_2 / 2)))
         self.bg_image2 = ImageTk.PhotoImage(image2)
@@ -141,7 +141,7 @@ class App(customtkinter.CTk):
                                           width=int(w_im_2 / 2))
         self.image_label2.grid(row=7, column=0, sticky="nw", padx=50, pady=15, columnspan=3)
 
-        image3 = Image.open("T_m.png")
+        image3 = Image.open("Images/T_m.png")
         w_im_3, h_im_3 = image3.size
         image3 = image3.resize((int(w_im_3 / 2), int(h_im_3 / 2)))
         self.bg_image3 = ImageTk.PhotoImage(image3)
@@ -160,7 +160,7 @@ class App(customtkinter.CTk):
                                                         command=self.change_appearance_mode)
         self.optionmenu_1.grid(row=11, column=0, pady=0, padx=2, sticky="w")
 
-        image = Image.open("board_init.png")
+        image = Image.open("Images/board_init.png")
         w_im, h_im =image.size
         image=image.resize((int(w_im/2),int(h_im/2)))
         self.bg_image = ImageTk.PhotoImage(image)
@@ -175,7 +175,7 @@ class App(customtkinter.CTk):
                                                         width=int(w_im/2.5))
         self.progressbar.grid(row=3, column=0, sticky="nw", padx=0, pady=10, columnspan=2)
 
-        image4 = Image.open("T_zoom_m.png")
+        image4 = Image.open("Images/T_zoom_m.png")
         w_im_4, h_im_4 = image4.size
         image4 = image4.resize((int(w_im_4 /1.3), int(h_im_4 / 1.3)))
         self.bg_image4 = ImageTk.PhotoImage(image4)
@@ -185,7 +185,7 @@ class App(customtkinter.CTk):
                                           width=int(w_im_4 / 1.3))
         self.image_label4.grid(row=0, column=3, sticky="nw", padx=0, pady=15)
 
-        image5 = Image.open("T_zoom_m.png")
+        image5 = Image.open("Images/T_zoom_m.png")
         w_im_5, h_im_5 = image5.size
         image5 = image5.resize((int(w_im_5 / 1.3), int(h_im_5 / 1.3)))
         self.bg_image5 = ImageTk.PhotoImage(image5)
@@ -231,7 +231,7 @@ class App(customtkinter.CTk):
     def initialisation(self):
         global i
         i=dict_corres[game_index]
-        image2 = Image.open("T_m.png")
+        image2 = Image.open("Images/T_m.png")
         w_im_2, h_im_2 = image2.size
         image2 = image2.resize((int(w_im_2 / 2), int(h_im_2 / 2)))
         self.bg_image2 = ImageTk.PhotoImage(image2)
@@ -241,7 +241,7 @@ class App(customtkinter.CTk):
                                           width=int(w_im_2 / 2))
         self.image_label2.grid(row=7, column=0, sticky="nw", padx=50, pady=15, columnspan=3)
 
-        image3 = Image.open("T_m.png")
+        image3 = Image.open("Images/T_m.png")
         w_im_3, h_im_3 = image3.size
         image3 = image3.resize((int(w_im_3 / 2), int(h_im_3 / 2)))
         self.bg_image3 = ImageTk.PhotoImage(image3)
@@ -250,7 +250,7 @@ class App(customtkinter.CTk):
                                           height=int(h_im_3 / 2),
                                           width=int(w_im_3 / 2))
         self.image_label3.grid(row=8, column=0, sticky="nw", padx=50, pady=2, columnspan=3)
-        image = Image.open("board_init.png")
+        image = Image.open("Images/board_init.png")
         w_im, h_im = image.size
         image = image.resize((int(w_im / 2), int(h_im / 2)))
         self.bg_image = ImageTk.PhotoImage(image)
@@ -259,7 +259,7 @@ class App(customtkinter.CTk):
                                          height=int(h_im / 2),
                                          width=int(w_im / 2))
         self.image_label.grid(row=0, column=0, sticky="nw", padx=15, pady=15, columnspan=2, rowspan=2)
-        image4 = Image.open("T_zoom_m.png")
+        image4 = Image.open("Images/T_zoom_m.png")
         w_im_4, h_im_4 = image4.size
         image4 = image4.resize((int(w_im_4 / 1.3), int(h_im_4 / 1.3)))
         self.bg_image4 = ImageTk.PhotoImage(image4)
@@ -269,7 +269,7 @@ class App(customtkinter.CTk):
                                           width=int(w_im_4 / 1.3))
         self.image_label4.grid(row=0, column=3, sticky="nw", padx=0, pady=15)
 
-        image5 = Image.open("T_zoom_m.png")
+        image5 = Image.open("Images/T_zoom_m.png")
         w_im_5, h_im_5 = image5.size
         image5 = image5.resize((int(w_im_5 / 1.3), int(h_im_5 / 1.3)))
         self.bg_image5 = ImageTk.PhotoImage(image5)
@@ -282,9 +282,9 @@ class App(customtkinter.CTk):
     def button_event2(self):
         global i
         global time
-        image2 = Image.open("T_m.png")
+        image2 = Image.open("Images/T_m.png")
         w_im_2, h_im_2 = image2.size
-        image5 = Image.open("T_zoom_m.png")
+        image5 = Image.open("Images/T_zoom_m.png")
         w_im_5, h_im_5 = image5.size
         nb_moves = getNbMoves(game_index)
         move_to_play_on_board, best_move_from, best_move_to = playMove(i, board,
@@ -304,7 +304,7 @@ class App(customtkinter.CTk):
         filename_probas_global = "./Images/probas_global"
         win_proba_graph_global(nb_moves, win_probas, show_graph=False, save_graph=filename_probas_global)
 
-        image = Image.open("board.png")
+        image = Image.open("Images/board.png")
         w_im, h_im = image.size
         image = image.resize((int(w_im/2), int(h_im/2)))
         self.bg_image = ImageTk.PhotoImage(image)
@@ -425,9 +425,9 @@ class App(customtkinter.CTk):
             self.initialisation()
         else:
             global i
-            image2 = Image.open("T_m.png")
+            image2 = Image.open("Images/T_m.png")
             w_im_2, h_im_2 = image2.size
-            image5 = Image.open("T_zoom_m.png")
+            image5 = Image.open("Images/T_zoom_m.png")
             w_im_5, h_im_5 = image5.size
             nb_moves = getNbMoves(game_index)
 
@@ -460,7 +460,7 @@ class App(customtkinter.CTk):
             filename_probas_global = "./Images/probas_global"
             win_proba_graph_global(nb_moves, win_probas, show_graph=False, save_graph=filename_probas_global)
 
-            image = Image.open("board.png")
+            image = Image.open("Images/board.png")
             w_im, h_im = image.size
             image = image.resize((int(w_im/2), int(h_im/2)))
             self.bg_image = ImageTk.PhotoImage(image)

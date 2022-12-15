@@ -113,18 +113,18 @@ def getMove(move):
 def save_board(board, last_move, best_move_from, best_move_to):
     im_svg = chess.svg.board(board, lastmove=last_move,
                              arrows=[chess.svg.Arrow(best_move_from, best_move_to, color="#cc0000cc")])
-    outputfile = open('board.svg', "w")
+    outputfile = open('Images/board.svg', "w")
     outputfile.write(im_svg)
     outputfile.close()
 
-    drawing = svg2rlg('board.svg')
-    renderPDF.drawToFile(drawing, "board.pdf")
+    drawing = svg2rlg('Images/board.svg')
+    renderPDF.drawToFile(drawing, "Images/board.pdf")
 
-    file_path= "board.pdf"
+    file_path= "Images/board.pdf"
     doc= fitz.open(file_path)
     for page in doc :
         pix= page.get_pixmap(dpi=300)
-        pix.save("board.png")
+        pix.save("Images/board.png")
 
 def line_0(nb_moves):
     x = 0
