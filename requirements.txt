@@ -15,3 +15,4 @@ Pillow
 tensorflow
 keras
 keras_tuner
+scipy
