@@ -6,17 +6,16 @@ from matplotlib.ticker import PercentFormatter
 from tqdm import tqdm
 import pandas as pd
 import pickle
-
 import chess
 from chess import *
 import chess.engine
 import chess.svg
-
 import svglib
 from svglib.svglib import svg2rlg
 from reportlab.graphics import renderPDF, renderPM
 from pdf2jpg import pdf2jpg
 import fitz
+import os
 
 moves_df = pd.read_csv("../Data/moves_df.csv", dtype={"fen": str, 'zobrist_key': str})
 # functions to evaluate a given chess position
