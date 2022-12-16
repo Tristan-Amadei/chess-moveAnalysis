@@ -189,8 +189,8 @@ def eval_graph_global(nb_moves, move_evals, show_graph=False, save_graph=None):
 def eval_graph_zoom(nb_moves, move_evals, best_move_evals, show_graph=False, save_graph=None):
     plt.figure(figsize=(10, 7))
     plt.plot(move_evals[:-1], marker='x')
-    plt.scatter(len(move_evals) - 1, move_evals[-1], color='black', s=200)
-    plt.scatter(len(move_evals) - 1, best_move_evals[-1], color='red', s=200)
+    plt.scatter(len(move_evals) - 1, move_evals[-1], color='black', s=200, label = 'Evaluation-move played')
+    plt.scatter(len(move_evals) - 1, best_move_evals[-1], color='red', s=200, label = 'Evaluation-best move')
 
     line_0(nb_moves)
     set_grid(nb_moves)
@@ -227,6 +227,8 @@ def eval_graph_zoom(nb_moves, move_evals, best_move_evals, show_graph=False, sav
     plt.xlabel("Coups joués", fontsize=14)
     plt.ylabel("Evaluation", fontsize=14)
 
+    plt.legend(loc='best')
+
     if save_graph != None:
         saving_graph(save_graph)
 
@@ -262,8 +264,8 @@ def win_proba_graph_global(nb_moves, win_probas, show_graph=False, save_graph=No
 def win_proba_graph_zoom(nb_moves, win_probas, win_probas_best_move, show_graph=False, save_graph=None):
     plt.figure(figsize=(10, 7))
     plt.plot(win_probas[:-1], marker='x')
-    plt.scatter(len(win_probas) - 1, win_probas[-1], color='black', s=200)
-    plt.scatter(len(win_probas) - 1, win_probas_best_move[-1], color='red', s=200)
+    plt.scatter(len(win_probas) - 1, win_probas[-1], color='black', s=200, label = 'Win proba-move played')
+    plt.scatter(len(win_probas) - 1, win_probas_best_move[-1], color='red', s=200, label = 'Win proba-best move')
 
     # plt.plot([0.5]*nb_moves, linestyle = 'dotted', color='black')
     line_0(nb_moves)
@@ -300,6 +302,8 @@ def win_proba_graph_zoom(nb_moves, win_probas, win_probas_best_move, show_graph=
     plt.ylabel("Probabilité")
     plt.xlabel("Coups joués")
 
+    plt.legend(loc='best')
+
     min_ = max(-1, len(win_probas) - 5)
     max_ = len(win_probas) + 1
     plt.xlim([min_, max_])
@@ -313,11 +317,9 @@ def win_proba_graph_zoom(nb_moves, win_probas, win_probas_best_move, show_graph=
     plt.close()
 
 def getNbMoves(game_index, moves_df=moves_df):
-    i = 0
+    i = dict_corres[game_index]
     nb = 0
-    while moves_df.iloc[i].game_index != game_index:
-        i += 1
-    while moves_df.iloc[i].game_index == game_index:
+    while i < len(moves_df) and moves_df.iloc[i].game_index == game_index:
         i += 1
         nb += 1
     return nb
