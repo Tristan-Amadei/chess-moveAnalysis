@@ -44,6 +44,10 @@ Le notebook "Data visualisation.ipynb" permet de faire des visualisations et des
 
 ## Interface Graphique
 Le fichier GUI.py correspond au code permet de créer notre interface graphique, et l'autre fichier .py (Fonction_GUI.py) permet de stocker les méthodes utilisées pour afficher et jouer avec notre base de données, directement dans l'interface graphique. 
+</br> ![gui](/assets/images/gui.png) </br>
+Cela nous permet de bien visualiser nos données. Lors d'une partie, les cases en vert indiquent le dernier coup qui a été joué, et la flèche en rouge indique le coup qui était le meilleur à jouer. En effet, pour chaque coup de notre base de données, nous invoquons le moteur d'échecs Stockfish pour déterminer le meilleur coup de la position actuelle. Puis nous jouons ce coup sur l'échiquier, et on analyse la position après ce coup pour connaitre son évaluation. Enfin, nous enlevons ce coup et jouons le coup présent dans notre base; le but étant de comparer l'évolution de l'évaluation de la position de la partie dans notre base, avec l'évaluation si les coups joués sonjt toujours les meilleurs (c'est pourquoi l'affichage de chaque coup prend un peu de temps dans la GUI). 
+</br> Sur l'interface, les graphes sur la gauche montrent l'évolution de l'évaluation et de la probabilité de gagner sur la partie entière, les graphes sur la droite montrent ces même valeurs mais seulement sur les 5 derniers coups, et permet aussi de comparer ces valeurs avec les valeurs optimales qui seraient obtenues en jouant les meilleurs coups. 
+</br> Les boutons permettent de se déplacer dans une partie; et on peut choisir le numéro de la partie à afficher avec la barre en-dessous du bouton 'Mes Options' en y tapant un numéro de partie (entre 0 et 118318). 
 </br> Le code étant parfois lourd dans les fichiers .py, nous avons repris les idées du code et les avons mises dans le notebook BrideData_GUI.ipynb, qui se veut plus simple à lire. 
 
 ## Machine Learning
