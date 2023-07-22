@@ -84,7 +84,7 @@ class RSquare(Metric):
     @typechecked
     def __init__(
         self,
-        name: str = "r_square_custom",
+        name: str = "r_square",
         dtype: AcceptableDTypes = None,
         multioutput: str = "uniform_average",
         num_regressors: tf.int32 = 0,
