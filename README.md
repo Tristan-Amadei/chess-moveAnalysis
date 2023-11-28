@@ -14,7 +14,7 @@ Le projet utilise plusieurs modules Python, pour les installer, utilisez la comm
 $ pip install -r requirements.txt
 ```
 
-## Ordre des Notebooks
+<!-- ## Ordre des Notebooks
 
 - [Data cleaning et processing](#data-cleaning--processing)
   - [1. Clean_dataset](#1-Clean_datasetipynb)
@@ -25,7 +25,7 @@ $ pip install -r requirements.txt
 - [Machine Learning](#Machine-learning)
   - [5. Clustering](#5-Clusteringipynb)
   - [6. Prediction](#6-Predictionipynb)
-  
+  -->
 ## Data Cleaning / Processing
 ### 1. Clean_dataset.ipynb
 La première étape ce de projet était de rendre utilisable la base de données. Le fichier de base ressemble à ceci: ![base_brute](/assets/images/chessDB.png)
@@ -50,28 +50,7 @@ Cela nous permet de bien visualiser nos données. Lors d'une partie, les cases e
 </br> Les boutons permettent de se déplacer dans une partie; et on peut choisir le numéro de la partie à afficher avec la barre en-dessous du bouton 'Mes Options' en y tapant un numéro de partie (entre 0 et 118318). 
 </br> Le code étant parfois lourd dans les fichiers .py, nous avons repris les idées du code et les avons mises dans le notebook BrideData_GUI.ipynb, qui se veut plus simple à lire. 
 
-## Machine Learning
-Le but ici est d'utiliser notre base afin d'entrainer des algorithmes de ML à déterminer la qualité d'un coup sur une position donnée. 
-</br> L'idée serait alors d'avoir une IA qui peut jouer aux échecs: pour jouer, elle détermine tous les coups jouables sur une position, les analyse tous avec ce qu'elle a appris de son entrainement et sélectionne celui qu'elle juge le meilleur. 
-
-### 5. Clustering.ipynb
-Nous voulons créer des algorithmes de classification de coups d'échecs. Nous devons donc créer nos classes; pour cela nous entrainons un K-Means pour créer nos clusters de coups d'échecs, qui deviendrons les classes que nous chercherons à predire à l'étape suivante. Le notebook utilisé ici est "Clustering.ipynb". 
-</br> On sauvegarde ces classes dans une nouvelle base, qui est la concatenation de la base précédente, moves_df, et des classes créées par K-Means. Elle est constuite dans le notebook, mais vous pouvez également la télécharger [ici](https://minio.lab.sspcloud.fr/tamadei/chessDB/full_moves_df.csv). 
-</br> De nouveau, cette base, nommée "full_moves_df.csv", soit être placée dans le dossier Data. 
-</br>Chaque classe correspond à un type de coup, déterminé par l'algorithme K-Means. Cependant, aux échecs, la majorité des coups sont "standards", ainsi le set déterminé par K-Means est très déséquilibré : ![clusters_breakdown](/assets/images/clusters_breakdown.png)
-
-### 6. Prediction.ipynb
-
-Il est enfin temps de passer à la prédiction ! On se place ici dans le notebook "Prediction.ipynb", et on reprend les résultats du K-Means précédent. 
-</br> On va tester plusieurs façons de travailler avec nos données : 
-    </br> - Random Forest
-    </br> - Under-Sampling
-    </br> - Balanced Random Forest
-    </br> - Neural Network
-    
-</br></br> Cependant, notre set de données est trop déséquilibré, et de plus, il faudrait travailler avec une représentation complète de l'échiquier pour faire apprendre quelque chose à nos algorithmes. 
-</br> Voici certains de nos résultats après entrainement d'un réseau de neurones sur nos data: 
-![nn](/assets/images/nn.png)
-</br>
-</br> D'après nos recherches, dont ce [papier](http://cs231n.stanford.edu/reports/2015/pdfs/ConvChess.pdf) de Stanford, il faudrait travailler avec des réseaux de neurones convolutionnels, prenant en entrée soit une image d'un échiquier soit une matrice 8x8 représentant la position actuelle de la partie d'échecs. 
-
+## CNNs
+Le but final était d'entrainer un CNN, prenant en entrée des matrices représentant les différentes positions de la base d'entrainement, avec les pièces one-hot encoded, afin qu'il soit capable d'évaluer une position quelconque. </br>
+Ce problème est une régression sur les valeurs associées aux positions dans le training set. Comme nous utilisons des parties de Maitres, la majorité des positions dans la base sont des positions plus ou moins égales. Ainsi, nous utilisons une MSE modifiée, qui applique, sur les potentielles erreurs, une pénalisation de moins en moins forte plus l'évaluation réelle devient grande en valeur absolue. </br>
+L'idée est, une fois le modèle entrainé, de pouvoir l'utiliser comme moteur d'échecs: sur une position donnée, on calcule tous les coups légaux que le joueur peut jouer, puis on utilise ce modèle pour évaluer la position atteinte après chaque coup potentiel, pour finalement jouer le coup le plus prometteur. 
